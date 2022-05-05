@@ -2,6 +2,8 @@ import { DbTestCase, DbTestCaseResults, getMocksToWrite } from "src/testing";
 
 const MOCKS_COUNT = 100;
 
+// Inserts an array of mock data one by one.
+// For each mock item we are calling one operation in database
 export default new DbTestCase({
   name: "insertSeparate",
   onRun: async (db) => {

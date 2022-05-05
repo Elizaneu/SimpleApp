@@ -2,6 +2,7 @@ import { DbTestCase, getMocksToWrite } from "src/testing";
 
 const MOCKS_COUNT = 100;
 
+// Finds a subset of mock data in the database using one opration for all mock data items
 export default new DbTestCase({
   name: "findMultiple",
   onRun: async (db) => {
