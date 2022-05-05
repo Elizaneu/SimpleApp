@@ -3,7 +3,7 @@ import { DbTestCase, DbTestCaseResults, getMocksToWrite } from "src/testing";
 const MOCKS_COUNT = 100;
 
 export default new DbTestCase(
-  __filename,
+  "insertMultiple",
   async (db) => {
     const mocks = getMocksToWrite(MOCKS_COUNT);
     const collection = db.getCollection();

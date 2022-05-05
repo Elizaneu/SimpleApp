@@ -3,13 +3,13 @@ import { DbTestCase, DbTestCaseResults, getMocksToWrite } from "src/testing";
 const MOCKS_COUNT = 100;
 
 export default new DbTestCase(
-  __filename,
+  "insertSeparate",
   async (db) => {
     const mocks = getMocksToWrite(MOCKS_COUNT);
     const nestedTestCases = mocks.map(
       (mock, index) =>
         new DbTestCase(
-          __filename + " - " + index,
+          index.toString(),
           async (db) => {
             const collection = db.getCollection();
             await collection.insertOne({
