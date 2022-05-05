@@ -11,7 +11,8 @@ export class MongoDb {
 
   public constructor(
     protected readonly url: string,
-    protected readonly dbName: string
+    protected readonly dbName: string,
+    public readonly localName: string
   ) {
     this.connection = new MongoClient(url);
     this._isConnected = false;

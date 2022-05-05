@@ -2,23 +2,22 @@ import { DbTestCase, DbTestCaseResults, getMocksToWrite } from "src/testing";
 
 const MOCKS_COUNT = 100;
 
-export default new DbTestCase(
-  "findSeparate",
-  async (db) => {
+export default new DbTestCase({
+  name: "findSeparate",
+  onRun: async (db) => {
     const mocks = getMocksToWrite(MOCKS_COUNT);
+
     const nestedTestCases = mocks.map(
       (mock, index) =>
-        new DbTestCase(
-          index.toString(),
-          async (db) => {
+        new DbTestCase({
+          name: `findSeparate - #${index}`,
+          onRun: async (db) => {
             const collection = db.getCollection();
             await collection.findOne({
-              publicId: index,
+              publicId: mock.publicId,
             });
           },
-          async (db) => {},
-          async (db) => {}
-        )
+        })
     );
 
     const results: DbTestCaseResults[] = [];
@@ -29,18 +28,14 @@ export default new DbTestCase(
 
     return results;
   },
-  async (db) => {
+  onDispose: async (db) => {
     const collection = db.getCollection();
     await collection.deleteMany({});
   },
-  async (db) => {
+  onBefore: async (db) => {
     const mocks = getMocksToWrite(MOCKS_COUNT);
     const collection = db.getCollection();
 
-    for (const mock of mocks) {
-      await collection.insertOne({
-        ...mock,
-      });
-    }
-  }
-);
+    await collection.insertMany(mocks);
+  },
+});

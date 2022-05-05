@@ -2,23 +2,22 @@ import { DbTestCase, DbTestCaseResults, getMocksToWrite } from "src/testing";
 
 const MOCKS_COUNT = 100;
 
-export default new DbTestCase(
-  "insertSeparate",
-  async (db) => {
+export default new DbTestCase({
+  name: "insertSeparate",
+  onRun: async (db) => {
     const mocks = getMocksToWrite(MOCKS_COUNT);
+
     const nestedTestCases = mocks.map(
       (mock, index) =>
-        new DbTestCase(
-          index.toString(),
-          async (db) => {
+        new DbTestCase({
+          name: `insertSeparate - #${index}`,
+          onRun: async (db) => {
             const collection = db.getCollection();
             await collection.insertOne({
               ...mock,
             });
           },
-          async (db) => {},
-          async (db) => {}
-        )
+        })
     );
 
     const results: DbTestCaseResults[] = [];
@@ -29,9 +28,8 @@ export default new DbTestCase(
 
     return results;
   },
-  async (db) => {
+  onDispose: async (db) => {
     const collection = db.getCollection();
     await collection.deleteMany({});
   },
-  async (db) => {}
-);
+});

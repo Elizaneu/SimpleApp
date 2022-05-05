@@ -1,33 +1,29 @@
-import { DbTestCase, DbTestCaseResults, getMocksToWrite } from "src/testing";
+import { DbTestCase, getMocksToWrite } from "src/testing";
 
 const MOCKS_COUNT = 100;
 
-export default new DbTestCase(
-  "findMultiple",
-  async (db) => {
+export default new DbTestCase({
+  name: "findMultiple",
+  onRun: async (db) => {
     const mocks = getMocksToWrite(MOCKS_COUNT);
     const collection = db.getCollection();
 
-    const fromIndex = Math.floor((Math.random() * MOCKS_COUNT) / 2);
-
-    const ids = mocks
-      .slice(fromIndex, Math.floor(MOCKS_COUNT / 3))
-      .map(({ publicId }) => publicId);
+    const ids = mocks.slice(50, 20).map(({ publicId }) => publicId);
 
     await collection
       .find({
-        publicId: { $nin: ids },
+        publicId: { $in: ids },
       })
       .toArray();
   },
-  async (db) => {
+  onDispose: async (db) => {
     const collection = db.getCollection();
     await collection.deleteMany({});
   },
-  async (db) => {
+  onBefore: async (db) => {
     const mocks = getMocksToWrite(MOCKS_COUNT);
     const collection = db.getCollection();
 
     await collection.insertMany(mocks);
-  }
-);
+  },
+});

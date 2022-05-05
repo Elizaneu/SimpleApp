@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "dev": "ts-node index.ts",
+    "tests": "ts-node index.ts tests",
+    "fill": "ts-node index.ts fill",
+    "clear": "ts-node index.ts clear",
     "db": "./run-local-db.sh"
   },
   "repository": {

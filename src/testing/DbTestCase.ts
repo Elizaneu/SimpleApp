@@ -11,12 +11,12 @@ export class DbTestCase {
   private db: MongoDb | undefined;
 
   public constructor(
-    public readonly name: string,
-    protected readonly onRun: (
-      db: MongoDb
-    ) => Promise<DbTestCaseResults[] | void>,
-    protected readonly onDispose: (db: MongoDb) => Promise<void>,
-    protected readonly onBefore: (db: MongoDb) => Promise<void>
+    public readonly options: {
+      readonly name: string;
+      readonly onRun: (db: MongoDb) => Promise<DbTestCaseResults[] | void>;
+      readonly onDispose?: (db: MongoDb) => Promise<void>;
+      readonly onBefore?: (db: MongoDb) => Promise<void>;
+    }
   ) {}
 
   public setMongoDb(db: MongoDb): void {
@@ -30,14 +30,29 @@ export class DbTestCase {
 
     const tracker = new TimeTracker();
 
-    await this.onBefore(this.db);
+    if (this.options.onBefore) {
+      console.log(
+        `[TEST_CASE] : ${this.options.name} on ${this.db.localName} : preparing...`
+      );
+      await this.options.onBefore(this.db);
+    }
+
     tracker.start();
-    const results = await this.onRun(this.db);
+    console.log(
+      `[TEST_CASE] : ${this.options.name} on ${this.db.localName} : running...`
+    );
+    const results = await this.options.onRun(this.db);
     tracker.stop();
-    await this.onDispose(this.db);
+
+    if (this.options.onDispose) {
+      console.log(
+        `[TEST_CASE] : ${this.options.name} on ${this.db.localName} : disposing...`
+      );
+      await this.options.onDispose(this.db);
+    }
 
     return {
-      name: this.name,
+      name: this.options.name,
       time: tracker.getTime(),
       nested: results || ([] as DbTestCaseResults[]),
     };
