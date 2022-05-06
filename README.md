@@ -1,4 +1,4 @@
-# Grid and Cloud. Database perfomance comparison
+# Grid and Cloud. Database performance comparison
 
 ## Demo
 To watch a short demo you can use the following link: <br/>
@@ -71,7 +71,7 @@ The application uses four operations: <code>insertMultiple</code>, <code>insertS
 - As you can see, when using only one operation to insert or search 100 items
 (<code>insertMultiple</code>, <code>findMultiple</code>) the database with container type connection has the best performance <br/>
 - When we use one by one insert or find for each element (<code>insertSeparate</code>, <code>findSeparate</code>) 
-the local database has the best perfomance. The average time to insert item and to search it is less than 1 ms <br/>
+the local database has the best performance. The average time to insert item and to search it is less than 1 ms <br/>
 - In all operations the cloud database has the worst performance
 
 ## Fill database
