@@ -6,7 +6,8 @@ https://youtu.be/LsMp2AqiLtM
 
 ## Stack
 **Server:** Node.js <br/>
-**Database:** mongoDB
+**Database:** mongoDB <br/>
+**Container:** Docker
 
 ## Business model
 **Entity:** <code>User</code> <br/>
